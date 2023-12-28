@@ -1,22 +1,14 @@
 plugins {
-    kotlin("jvm") version "1.9.20"
+    kotlin("jvm") apply false
 }
 
-group = "com.otuskotlin.marketplace"
-version = "1.0-SNAPSHOT"
+group = "com.otus.otuskotlin.marketplace"
+version = "0.0.1"
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    testImplementation(kotlin("test"))
-}
-
-tasks.test {
-    useJUnitPlatform()
-}
-
-kotlin {
-    jvmToolchain(8)
+subprojects {
+    repositories{
+        mavenCentral()
+    }
+    group = rootProject.group
+    version = rootProject.version
 }
