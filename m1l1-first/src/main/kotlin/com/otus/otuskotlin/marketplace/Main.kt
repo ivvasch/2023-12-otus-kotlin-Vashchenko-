@@ -1,5 +1,5 @@
-class Main {
+package com.otus.otuskotlin.marketplace
+
     fun main() {
         println("Hello word")
     }
-}
