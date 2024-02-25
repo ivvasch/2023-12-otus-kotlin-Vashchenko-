@@ -1,0 +1,4 @@
+class FromContext {
+    var from = ""
+
+}
