@@ -3,18 +3,11 @@ pluginManagement {
         val kotlinVersion: String by settings
         kotlin("jvm") version kotlinVersion
     }
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-    }
 }
 
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
 }
 
-rootProject.name = "otuskotlin-marketplace-202312"
+rootProject.name = "composite-3"
 
-includeBuild("lessons")
-includeBuild("ok-marketplace-be")
-includeBuild("composite-3")
