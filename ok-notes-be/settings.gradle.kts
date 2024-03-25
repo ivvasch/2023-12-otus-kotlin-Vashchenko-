@@ -1,4 +1,4 @@
-rootProject.name = "ok-marketplace-be"
+rootProject.name = "ok-notes-be"
 
 dependencyResolutionManagement{
     versionCatalogs{
