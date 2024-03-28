@@ -16,5 +16,5 @@ plugins {
 rootProject.name = "otuskotlin-marketplace-202312"
 
 includeBuild("lessons")
-includeBuild("ok-marketplace-be")
+includeBuild("ok-notes-be")
 includeBuild("composite-3")
