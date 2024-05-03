@@ -1,8 +1,8 @@
 rootProject.name = "ok-notes-be"
 
-dependencyResolutionManagement{
-    versionCatalogs{
-        create("libs"){
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("libs") {
             from(files("../gradle/libs.versions.toml"))
         }
     }
@@ -10,19 +10,22 @@ dependencyResolutionManagement{
 
 
 pluginManagement {
+    includeBuild("../plugins")
     plugins {
-        includeBuild("../plugins")
-        plugins{
-            id("build-jvm") apply false
-            id("build-kmp") apply false
-        }
-        repositories{
-            mavenCentral()
-            gradlePluginPortal()
-        }
+        id("build-jvm") apply false
+    }
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
     }
 }
+
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
 }
+
+include(":api-v1-jackson")
+include(":notes-common")
+include(":notes-v1-mappers")
+include(":notes-commonTest")
 

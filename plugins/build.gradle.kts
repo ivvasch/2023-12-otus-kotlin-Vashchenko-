@@ -23,12 +23,6 @@ repositories {
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
+    implementation(libs.plugin.binaryCompatibilityValidator)
     implementation(libs.plugin.kotlin)
-}
-
-tasks.test {
-    useJUnitPlatform()
-}
-kotlin {
-    jvmToolchain(17)
 }

@@ -1,0 +1,380 @@
+openapi: "3.0.3"
+info:
+  title: Notes ${VERSION_APP}
+  description: Your notes will be always here
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api/v1
+tags:
+  - name: notes
+    description: Заметка
+paths:
+  /create:
+    post:
+      tags:
+        - notes
+      summary: Create your note
+      operationId: noteCreate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoteCreateRequest'
+        required: true
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteCreateResponse'
+  /read:
+    post:
+      tags:
+        - notes
+      summary: get your notes
+      operationId: getNote
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoteReadRequest'
+        required: true
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteReadResponse'
+  /update:
+    post:
+      tags:
+        - notes
+      summary: update note
+      operationId: updateNote
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoteUpdateRequest'
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteUpdateResponse'
+  /delete:
+    post:
+      tags:
+        - notes
+      summary: delete note
+      operationId: deleteNote
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoteDeleteRequest'
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteDeleteResponse'
+  /search:
+    post:
+      tags:
+        - notes
+      summary: search note
+      operationId: searchNote
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoteSearchRequest'
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteSearchResponse'
+
+components:
+  schemas:
+
+    IRequest:
+      type: object
+      description: Common interface
+      properties:
+        requestType:
+          type: string
+          description: Discriminator
+          example: create
+      discriminator:
+        propertyName: requestType
+        mapping:
+          create: '#/components/schemas/NoteCreateRequest'
+          read: '#/components/schemas/NoteReadRequest'
+          update: '#/components/schemas/NoteUpdateRequest'
+          delete: '#/components/schemas/NoteDeleteRequest'
+          search: '#/components/schemas/NoteSearchRequest'
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
+
+    IResponse:
+      type: object
+      description: Common interface for response
+      properties:
+        responseType:
+          type: string
+          description: Discriminator
+          example: create
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+      discriminator:
+        propertyName: responseType
+        mapping:
+          create: '#/components/schemas/NoteCreateResponse'
+          read: '#/components/schemas/NoteReadResponse'
+          update: '#/components/schemas/NoteUpdateResponse'
+          delete: '#/components/schemas/NoteDeleteResponse'
+          search: '#/components/schemas/NoteSearchResponse'
+
+    NoteCreateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/NoteRequestDebug'
+        - type: object
+          properties:
+            note:
+              $ref: '#/components/schemas/NoteCreateObject'
+
+    NoteCreateObject:
+      allOf:
+        - $ref: '#/components/schemas/Note'
+
+    Note:
+      type: object
+      description: Общие свойства для создания и обновления заметки
+      properties:
+        noteId:
+          type: string
+          description: id заметки
+        title:
+          type: string
+          description: Название заметки
+        description:
+          type: string
+          description: Тело заметки
+        owner:
+          $ref: '#/components/schemas/NoteOwner'
+        files:
+          type: object
+          description: загружаемые пользователем файлы
+
+    NoteOwner:
+      type: object
+      description: Данные пользователя
+      properties:
+        id:
+          $ref: '#/components/schemas/OwnerId'
+        name:
+          type: string
+          description: Имя пользователя
+        phone:
+          type: string
+          description: Телефон пользователя
+        email:
+          type: string
+          description: email пользователя.
+
+    OwnerId:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Id владельца
+
+    NoteRequestDebugMode:
+        type: string
+        enum:
+          - prod
+          - test
+
+    NoteRequestDebug:
+        type: object
+        properties:
+          debug:
+            $ref: '#/components/schemas/NoteDebug'
+
+    NoteDebug:
+        type: object
+        properties:
+          mode:
+            $ref: '#/components/schemas/NoteRequestDebugMode'
+
+    NoteReadRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/NoteRequestDebug'
+        - type: object
+          properties:
+            note:
+              $ref: '#/components/schemas/NoteReadObject'
+
+    NoteReadObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/NoteId'
+
+    NoteId:
+      type: string
+      description: id заметки
+
+    NoteUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/NoteRequestDebug'
+        - type: object
+          properties:
+            note:
+              $ref: '#/components/schemas/NoteUpdateObject'
+
+    NoteUpdateObject:
+      allOf:
+        - $ref: '#/components/schemas/Note'
+
+    NoteDeleteRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/NoteRequestDebug'
+        - type: object
+          properties:
+            note:
+              $ref: '#/components/schemas/NoteDeleteObject'
+
+    NoteDeleteObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/NoteId'
+
+    NoteSearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/NoteRequestDebug'
+        - type: object
+          properties:
+            noteFilter:
+              $ref: '#/components/schemas/NoteSearchFilter'
+
+    NoteSearchFilter:
+      type: object
+      description: Набор фильтров для поиска.
+      properties:
+        searchString:
+          type: string
+          description: Поисковая строка
+
+    NoteResponseObject:
+      allOf:
+        - $ref: '#/components/schemas/Note'
+        - type: object
+          description: Объект, который возвращается в ответе из бэка
+          properties:
+#            id:
+#              $ref: '#/components/schemas/NoteId'
+#            ownerId:
+#              $ref: '#/components/schemas/OwnerId'
+            permission:
+              type: array
+              uniqueItems: true
+              items:
+                $ref: '#/components/schemas/NotePermission'
+
+    NotePermission:
+      type: string
+      description: Разрешения для работы над заметками
+      enum:
+        - read
+        - update
+        - delete
+
+    NoteResponseSingle:
+      allOf:
+        - type: object
+          description: Ответ с одной заметкой
+          properties:
+            note:
+              $ref: '#/components/schemas/NoteResponseObject'
+
+    NoteResponseMulti:
+      allOf:
+        - type: object
+          description: Ответ с несколькими заметками
+          properties:
+            notes:
+              type: array
+              items:
+                $ref: '#/components/schemas/NoteResponseObject'
+
+    NoteCreateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/NoteResponseSingle'
+
+    NoteReadResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/NoteResponseSingle'
+
+    NoteUpdateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/NoteResponseSingle'
+
+    NoteDeleteResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/NoteResponseSingle'
+
+    NoteSearchResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/NoteResponseMulti'
+
+
