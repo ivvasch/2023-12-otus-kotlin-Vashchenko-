@@ -330,6 +330,7 @@ components:
       type: string
       description: Разрешения для работы над заметками
       enum:
+        - create
         - read
         - update
         - delete
