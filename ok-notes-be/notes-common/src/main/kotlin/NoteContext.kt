@@ -5,6 +5,7 @@ import com.otus.otuskotlin.marketplace.models.*
 import kotlinx.datetime.Instant
 
 data class NoteContext (
+    var command: NoteCommand = NoteCommand.NONE,
     var state: NoteState = NoteState.NONE,
     val errors: MutableList<NoteError> = mutableListOf(),
     var workMode: NoteWorkMode = NoteWorkMode.PROD,

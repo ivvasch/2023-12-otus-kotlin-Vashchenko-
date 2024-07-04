@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+
+# Endpoint
+management:
+  endpoint:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: info,env
+
+spring:
+  jackson:
+    default-property-inclusion: non_null
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    use-root-path: true
+    urls:
+      - name: v1
+        url: spec-notes-v1.yaml
+#notes:
+#  repository:
+#    test: "inmemory"
+#    prod: "${DB_TYPE_PROD:inmemory}"
+
+#psql:
+#  host: "${NOTES_HOST:localhost}"
+#  port: "${NOTES_PORT:5433}"
+#  user: "${NOTES_USER:postgres}"
+#  password: "${NOTES_PASS:notesPass!}"
+#  schema: public
+#  database: "${NOTES_DB:notes}"
